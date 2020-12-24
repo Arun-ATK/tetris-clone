@@ -7,21 +7,35 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] tetrominos;
 
-    //public GameObject tetrominos;s
-    //public GameObject cell;
-    //public Transform[] spawnPoints;
-    //[Header("Tetrominos")]
-    //int[] tetOSpawnPoints = { 0, 1, 3, 4 };
+    public void SpawnNext()
+    {
+        print("Spawning");
+    }
 
     private void Start()
     {
-        //GameObject tetO = tetrominos.transform.GetChild(3).gameObject;
-        //foreach (var spPoint in tetO) {
-        //    Instantiate(cell, spawnPoints[spPoint].position, Quaternion.identity);
+        Wall();
+
+        int tetToSpawn = Random.Range(0, tetrominos.Length);
+
+        tetToSpawn = 5;
+
+        GameObject tetromino = tetrominos[tetToSpawn].transform.gameObject;
+
+        int spawnPoint = 0;
+        if(tetromino.tag == "tetO") {
+            spawnPoint = 1;
+        }
+
+        Instantiate(tetromino, spawnerPoints[spawnPoint].position, Quaternion.identity);
+
+    }
+
+    private void Wall()
+    {
+        //for(int i = 0; i < 10; ++i) {
+        //    playField[i, 5] = true;
         //}
-
-        GameObject tetO = tetrominos[3].transform.gameObject;
-        Instantiate(tetO, spawnerPoints[1].position, Quaternion.identity);
-
+        playField[5, 5] = true;
     }
 }
