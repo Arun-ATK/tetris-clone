@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
 
     public void SpawnNext()
     {
-        print("Spawning");
+        Start();
+        //print(playField[5, 1]);
     }
 
     private void Start()
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
 
         int tetToSpawn = Random.Range(0, tetrominos.Length);
 
-        tetToSpawn = 5;
+        tetToSpawn = 1;
 
         GameObject tetromino = tetrominos[tetToSpawn].transform.gameObject;
 

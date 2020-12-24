@@ -95,5 +95,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startTimer: 0.3
-  fallTimer: 0.3
+  fallTimer: 0.5
   gm: {fileID: 0}

@@ -13,11 +13,11 @@ public class TetHolder : MonoBehaviour
         //print(children.Length);
     }
 
-    public void StopFalling(int x, int y)
+    public void StopFalling()
     {
         foreach (Cell child in children) {
-            //print(child.transform.position);
-            child.StopFall(x, y);
+            print(child.transform.position + " is called");
+            child.StopFall((int)child.transform.position.x, (int)child.transform.position.y);
         }
 
         gm.SpawnNext();

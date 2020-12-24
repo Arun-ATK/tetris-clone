@@ -33,8 +33,8 @@ public class Cell : MonoBehaviour
             //TetHolder parent = GetComponentInParent<TetHolder>();
             //parent.StopFalling(x, y);
 
-            Debug.Log("(" + x + ", " + y + "): " + gm.playField[x, y]);
-            GetComponentInParent<TetHolder>().StopFalling(x, y);
+            print("caller: " + transform.position);
+            GetComponentInParent<TetHolder>().StopFalling();
 
             return;
         }
@@ -50,7 +50,7 @@ public class Cell : MonoBehaviour
     {
         gm.playField[x, y] = true;
 
-        print(transform.position + " : " + gm.playField[x, y]);
+        print(x + "," + y + " : " + gm.playField[x, y]);
 
 
         GetComponent<Cell>().enabled = false;
