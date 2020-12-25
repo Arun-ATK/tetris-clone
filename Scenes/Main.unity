@@ -193,6 +193,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4771342229118611071, guid: de704e23fc922224dbca77fac79e233f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de704e23fc922224dbca77fac79e233f, type: 3}
 --- !u!1 &253642886
@@ -909,7 +914,7 @@ MonoBehaviour:
   - {fileID: 267324819}
   tetrominos:
   - {fileID: 3393942130677420084, guid: 316bcda0d2c02764f85d6130038ae1e3, type: 3}
-  - {fileID: 8235595809362386639, guid: 88e4d4e1d5a8939419fc6c4922123751, type: 3}
+  - {fileID: 5989229239019686466, guid: 88e4d4e1d5a8939419fc6c4922123751, type: 3}
   - {fileID: 6759912063650286286, guid: 05411d2ee3d6a9d4a9e191d2a6a0714c, type: 3}
   - {fileID: 4627656240740102784, guid: 2726d47a42347584a8f0db9918f1aa19, type: 3}
   - {fileID: 1671930131096558675, guid: 27ca98222403b4544abaf4e00c230e65, type: 3}
