@@ -3,29 +3,23 @@
 public class TetHolder : MonoBehaviour
 {
     public GameManager gm;
+
     private Cell[] children;
-
-    float val = 0.3f;
-
-    public float fallTimer;
-    public float fallIncrement;
+    private float fallTimer;
+    private float fallIncrement;
 
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
-
         children = GetComponentsInChildren<Cell>();
 
-        fallTimer = fallIncrement = val;
-
+        fallTimer = fallIncrement = gm.fallVal;
     }
 
     private void Update()
     {
-
         if(Time.time >= fallTimer) {
             Fall();
-
             fallTimer = Time.time + fallIncrement;
         }
     }
@@ -35,8 +29,6 @@ public class TetHolder : MonoBehaviour
         bool canFall = true;
         foreach (Cell cell in children) {
             canFall &= cell.IsSafe();
-
-            //print(cell.transform.position);
         }
 
         if(!canFall) {
@@ -49,12 +41,11 @@ public class TetHolder : MonoBehaviour
         }
     }
 
-    public void StopFalling()
+    private void StopFalling()
     {
         foreach (Cell child in children) {
             child.markField();
         }
-
 
         gm.SpawnNext();
 

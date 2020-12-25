@@ -3,9 +3,11 @@
 public class GameManager : MonoBehaviour
 {
     public bool[,] playField = new bool[10, 24];
-    public Transform[] spawnerPoints;
 
+    public Transform[] spawnerPoints;
     public GameObject[] tetrominos;
+
+    public float fallVal = 0.3f;
 
     public void SpawnNext()
     {
@@ -21,15 +23,16 @@ public class GameManager : MonoBehaviour
         else {
             print("Game Over");
         }
-        //print(playField[5, 1]);
     }
 
     private void Start()
     {
-        //Wall();
 
         int tetToSpawn = Random.Range(0, tetrominos.Length);
 
+        // Debug commands
+
+        //Wall();
         //tetToSpawn = 1;
 
         GameObject tetromino = tetrominos[tetToSpawn].transform.gameObject;
@@ -40,7 +43,6 @@ public class GameManager : MonoBehaviour
         }
 
         Instantiate(tetromino, spawnerPoints[spawnPoint].position, Quaternion.identity);
-
     }
 
     private void Wall()
@@ -48,6 +50,6 @@ public class GameManager : MonoBehaviour
         //for(int i = 0; i < 10; ++i) {
         //    playField[i, 5] = true;
         //}
-        playField[5, 5] = true;
+        //playField[5, 5] = true;
     }
 }

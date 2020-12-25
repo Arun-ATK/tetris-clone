@@ -14,25 +14,23 @@ public class Cell : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    if (Time.time >= startTimer) {
-    //        Fall();
-
-    //        startTimer = Time.time + fallTimer;
-    //    }
-    //}
+    // Checks if the position below a cell is empty
     public bool IsSafe()
     {
         // TODO: Ensure that floating values don't occur
         int x = (int)transform.position.x;
         int y = (int)transform.position.y;
 
-        //print(!gm.playField[x, y - 1] && y >= 0);
+        // Error Conditions
+        if(x < 0 || x > 19) {
+            x = 5;
+            Debug.LogError("<b>ERROR</b>: Position of cell out of bounds!");
+        }
+
         return (y > 0 && !gm.playField[x, y - 1]);
     }
 
+    // Marks the current position as occupied
     public void markField()
     {
         int x = (int)transform.position.x;
@@ -40,32 +38,4 @@ public class Cell : MonoBehaviour
 
         gm.playField[x, y] = true;
     }
-
-    //void Fall()
-    //{
-    //    int x = (int) transform.position.x;
-    //    int y = (int) transform.position.y;
-
-    //    if (y <= 0 || gm.playField[x, y - 1]) {
-
-    //        print("caller: " + transform.position);
-    //        GetComponentInParent<TetHolder>().StopFalling();
-
-    //        return;
-    //    }
-
-    //    if (!gm.playField[x,y - 1]) {
-    //        transform.position = new Vector2(x, y - 1);
-    //    }
-    //}
-
-    //void StopFall(int x, int y)
-    //{
-    //    gm.playField[x, y] = true;
-
-    //    print(x + "," + y + " : " + gm.playField[x, y]);
-
-
-    //    GetComponent<Cell>().enabled = false;
-    //}
 }
