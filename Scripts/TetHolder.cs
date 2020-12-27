@@ -7,6 +7,7 @@ public class TetHolder : MonoBehaviour
     private Cell[] children;
     private float fallTimer;
     private float fallIncrement;
+    //private float moveSpeed = 2f;
 
     private void Start()
     {
@@ -18,6 +19,29 @@ public class TetHolder : MonoBehaviour
 
     private void Update()
     {
+        bool moveLeft  = false;
+        bool moveRight = false;
+        moveLeft  = Input.GetKeyDown(KeyCode.A);
+        moveRight = Input.GetKeyDown(KeyCode.D);
+
+        float x = transform.position.x;
+        float y = transform.position.y;
+
+        foreach (Cell child in children) {
+            if(child.transform.position.x <= 0 || gm.playField[(int)child.transform.position.x - 1, (int)child.transform.position.y]) {
+                moveLeft = false;
+            }
+            else if(child.transform.position.x >= 9 || gm.playField[(int)child.transform.position.x + 1, (int)child.transform.position.y]) {
+                moveRight = false;
+            }
+        }
+        if(moveLeft) {
+            transform.position = new Vector2(x - 1, y);
+        }
+        else if(moveRight) {
+            transform.position = new Vector2(x + 1, y);
+        }
+
         if(Time.time >= fallTimer) {
             Fall();
             fallTimer = Time.time + fallIncrement;
