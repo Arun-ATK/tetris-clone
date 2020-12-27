@@ -4,10 +4,14 @@ public class TetHolder : MonoBehaviour
 {
     public GameManager gm;
 
+    public float moveVal = 0.1f;
+
     private Cell[] children;
     private float fallTimer;
     private float fallIncrement;
-    //private float moveSpeed = 2f;
+
+    private float moveIncrement;
+    private float moveTimer;
 
     private void Start()
     {
@@ -15,14 +19,21 @@ public class TetHolder : MonoBehaviour
         children = GetComponentsInChildren<Cell>();
 
         fallTimer = fallIncrement = gm.fallVal;
+        moveTimer = moveIncrement = moveVal;
     }
 
     private void Update()
     {
         bool moveLeft  = false;
         bool moveRight = false;
-        moveLeft  = Input.GetKeyDown(KeyCode.A);
-        moveRight = Input.GetKeyDown(KeyCode.D);
+
+
+        if (Time.time > moveTimer) {
+            moveLeft  = Input.GetKey(KeyCode.A);
+            moveRight = Input.GetKey(KeyCode.D);
+
+            moveTimer = Time.time + moveVal;
+        }
 
         float x = transform.position.x;
         float y = transform.position.y;
