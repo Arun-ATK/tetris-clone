@@ -27,7 +27,7 @@ public class TetHolder : MonoBehaviour
         bool moveLeft  = false;
         bool moveRight = false;
 
-
+        #region LeftRight
         if (Time.time > moveTimer) {
             moveLeft  = Input.GetKey(KeyCode.A);
             moveRight = Input.GetKey(KeyCode.D);
@@ -35,25 +35,29 @@ public class TetHolder : MonoBehaviour
             moveTimer = Time.time + moveVal;
         }
 
-        float x = transform.position.x;
-        float y = transform.position.y;
+        float holderX = transform.position.x;
+        float holderY = transform.position.y;
 
         foreach (Cell child in children) {
-            if(child.transform.position.x <= 0 || gm.playField[(int)child.transform.position.x - 1, (int)child.transform.position.y]) {
+            float childX = child.transform.position.x;
+            float childY = child.transform.position.y;
+
+            if(childX <= 0 || gm.playField[(int)childX - 1, (int)childY]) {
                 moveLeft = false;
             }
-            else if(child.transform.position.x >= 9 || gm.playField[(int)child.transform.position.x + 1, (int)child.transform.position.y]) {
+            else if(childX >= 9 || gm.playField[(int)childX + 1, (int)childY]) {
                 moveRight = false;
             }
         }
         if(moveLeft) {
-            transform.position = new Vector2(x - 1, y);
+            transform.position = new Vector2(holderX - 1, holderY);
         }
         else if(moveRight) {
-            transform.position = new Vector2(x + 1, y);
+            transform.position = new Vector2(holderX + 1, holderY);
         }
+        #endregion
 
-        if(Time.time >= fallTimer) {
+        if (Time.time >= fallTimer) {
             Fall();
             fallTimer = Time.time + fallIncrement;
         }
