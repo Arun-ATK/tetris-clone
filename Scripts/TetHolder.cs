@@ -85,10 +85,10 @@ public class TetHolder : MonoBehaviour
         foreach (Cell child in children) {
             child.markField();
         }
+        transform.DetachChildren();
+        Destroy(gameObject);
 
         gm.SpawnNext();
 
-        transform.DetachChildren();
-        Destroy(gameObject);
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
             }
         }
         if (canPlay) {
+            checkLines();
             Start(); 
         }
         else {
@@ -31,9 +33,8 @@ public class GameManager : MonoBehaviour
         int tetToSpawn = Random.Range(0, tetrominos.Length);
 
         // Debug commands
-
         //Wall();
-        //tetToSpawn = 1;
+        //tetToSpawn = 3;
 
         GameObject tetromino = tetrominos[tetToSpawn].transform.gameObject;
 
@@ -45,11 +46,64 @@ public class GameManager : MonoBehaviour
         Instantiate(tetromino, spawnerPoints[spawnPoint].position, Quaternion.identity);
     }
 
-    private void Wall()
+    private void checkLines()
     {
-        //for(int i = 0; i < 10; ++i) {
-        //    playField[i, 5] = true;
-        //}
-        //playField[5, 5] = true;
+
+        bool lineFilled = true;
+        Debug.Log("Checking lines " + lineFilled);
+        for(int row = 0; row < playField.GetLength(1); ++row) {
+            for(int col = 0; col < playField.GetLength(0); ++col) {
+                lineFilled &= playField[col, row];
+            }
+
+            if(lineFilled) {
+                clearLine(row);
+                --row;
+            }
+            else {
+                lineFilled = true;
+            }
+        }
     }
+
+    private void clearLine(int row)
+    {
+        Cell[] cells = FindObjectsOfType<Cell>();
+
+        List<Cell> cellsAbove = new List<Cell>();
+        List<Cell> cellsToDelete = new List<Cell>();
+
+        foreach (Cell cell in cells) {
+            if(cell.transform.position.y > row) {
+                cellsAbove.Add(cell);
+            }
+            else if(cell.transform.position.y == row) {
+                cellsToDelete.Add(cell);
+            }
+        }
+
+        foreach (Cell cell in cellsToDelete) {
+            Destroy(cell.gameObject);
+            playField[(int)cell.transform.position.x, (int)cell.transform.position.y] = false;
+        }
+
+        foreach (Cell cell in cellsAbove) {
+            cell.transform.position = new Vector2(cell.transform.position.x, cell.transform.position.y - 1);
+        }
+
+        for(int j = row; j < playField.GetLength(1) - 1; ++j) {
+            for (int i = 0; i < playField.GetLength(0); ++i) {
+                playField[i, j] = playField[i, j + 1];
+            }
+        }
+    }
+
+
+    //private void Wall()
+    //{
+    //    for (int i = 0; i < 10; ++i) {
+    //        playField[i, 5] = true;
+    //    }
+    //    playField[5, 5] = true;
+    //}
 }
