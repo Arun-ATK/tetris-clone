@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 551581510529982334}
   m_Layer: 0
   m_Name: TetI
-  m_TagString: Untagged
+  m_TagString: TetI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41899458037f407418f5a55ecd9e320c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gm: {fileID: 0}
+  moveVal: 0.1
 --- !u!1001 &755555144616426754
 PrefabInstance:
   m_ObjectHideFlags: 0

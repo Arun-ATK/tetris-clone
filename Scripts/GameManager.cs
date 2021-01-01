@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public bool[,] playField = new bool[10, 24];
 
-    public Transform[] spawnerPoints;
+    public Transform[] spawnPoints;
     public GameObject[] tetrominos;
 
     public float fallVal = 0.3f;
@@ -38,12 +38,15 @@ public class GameManager : MonoBehaviour
 
         GameObject tetromino = tetrominos[tetToSpawn].transform.gameObject;
 
-        int spawnPoint = 0;
+        int spawnPoint = 2;
         if(tetromino.CompareTag("TetO")) {
             spawnPoint = 1;
         }
+        else if(tetromino.CompareTag("TetI")) {
+            spawnPoint = 0;
+        }
 
-        Instantiate(tetromino, spawnerPoints[spawnPoint].position, Quaternion.identity);
+        Instantiate(tetromino, spawnPoints[spawnPoint].position, Quaternion.identity);
     }
 
     private void checkLines()
