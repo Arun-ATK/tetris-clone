@@ -5,6 +5,7 @@ public class TetHolder : MonoBehaviour
     public GameManager gm;
 
     public float moveVal = 0.1f;
+    public float rotateVal = 0.1f;
 
     private Cell[] children;
     private float fallTimer;
@@ -13,36 +14,55 @@ public class TetHolder : MonoBehaviour
     private float moveIncrement;
     private float moveTimer;
 
+    private float rotateIncrement;
+    private float rotateTimer;
+
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
         children = GetComponentsInChildren<Cell>();
 
-        fallTimer = fallIncrement = gm.fallVal;
-        moveTimer = moveIncrement = moveVal;
+        fallTimer   = fallIncrement   = gm.fallVal;
+        moveTimer   = moveIncrement   = moveVal;
+        rotateTimer = rotateIncrement = rotateVal;
     }
 
     private void Update()
     {
-        //Rotate();
+        if(Time.time >= rotateTimer) {
+            if(Input.GetKey(KeyCode.Slash)) {
+                Rotate(true);
+            }
+            else if(Input.GetKey(KeyCode.Period)) {
+                Rotate(false);
+            }
+
+            rotateTimer = Time.time + rotateIncrement;
+        }
         LeftRightMovement();
 
         if (Time.time >= fallTimer) {
-            Rotate();
             Fall();
             fallTimer = Time.time + fallIncrement;
         }
     }
 
-    private void Rotate()
+    private void Rotate(bool isClockwise)
     {
         bool isBlocked = false;
 
         Vector2[] newLocalChildPos = new Vector2[children.Length];
 
         for(int i = 0; i < children.Length; ++i) {
-            newLocalChildPos[i].x = -children[i].transform.localPosition.y;
-            newLocalChildPos[i].y =  children[i].transform.localPosition.x;
+            newLocalChildPos[i].x = children[i].transform.localPosition.y;
+            newLocalChildPos[i].y = children[i].transform.localPosition.x;
+
+            if(isClockwise) {
+                newLocalChildPos[i].x = -newLocalChildPos[i].x;
+            }
+            else {
+                newLocalChildPos[i].y = -newLocalChildPos[i].y;
+            }
 
             float globalX = transform.position.x + newLocalChildPos[i].x;
             float globalY = transform.position.y + newLocalChildPos[i].y;
@@ -74,7 +94,7 @@ public class TetHolder : MonoBehaviour
             moveLeft = Input.GetKey(KeyCode.A);
             moveRight = Input.GetKey(KeyCode.D);
 
-            moveTimer = Time.time + moveVal;
+            moveTimer = Time.time + moveIncrement;
         }
 
         foreach (Cell child in children) {
