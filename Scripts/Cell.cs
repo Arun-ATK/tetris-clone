@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    public float startTimer = 1f;
-    public float fallTimer = 1f;
-    public GameManager gm;
+    private GameManager gm;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +27,7 @@ public class Cell : MonoBehaviour
     }
 
     // Marks the current position as occupied
-    public void markField()
+    public void MarkField()
     {
         int x = (int)transform.position.x;
         int y = (int)transform.position.y;

@@ -137,7 +137,7 @@ public class TetHolder : MonoBehaviour
     private void StopFalling()
     {
         foreach (Cell child in children) {
-            child.markField();
+            child.MarkField();
         }
         transform.DetachChildren();
         Destroy(gameObject);
