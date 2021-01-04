@@ -784,7 +784,9 @@ MonoBehaviour:
   - {fileID: 1671930131096558675, guid: 27ca98222403b4544abaf4e00c230e65, type: 3}
   - {fileID: 4216659566953309039, guid: e6a8d382bc0d20247b8262648e2f322c, type: 3}
   - {fileID: 6116831150523467265, guid: 758deffd62415174c8486f86dfd811ac, type: 3}
-  fallVal: 0.5
+  moveVal: 0.1
+  rotateVal: 0.2
+  fallVal: 0.4
 --- !u!4 &1793137312
 Transform:
   m_ObjectHideFlags: 0

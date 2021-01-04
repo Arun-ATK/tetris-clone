@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,24 +9,31 @@ public class GameManager : MonoBehaviour
     public Transform[] spawnPoints;
     public GameObject[] tetriminos;
 
-    public float fallVal = 0.3f;
+    [Header("Movement Values")]
+    public float moveVal   = 0.1f;
+    public float rotateVal = 0.2f;
+    public float fallVal   = 0.3f;
+
+    [Header("Score")]
+    public Text scoreText;
+    public int score = 0;
 
     private void Start()
     {
         CreateNewTetrimino();
     }
 
+
     public void SpawnNext()
     {
-        bool canPlay = true;
-
-        // Iterate through every cell point above 20.
-        // If any of the point is occupied, then the player has
-        // reached game over conditions.
+        /// Iterate through every cell point above 20.
+        /// If any of the point is occupied, then the player has
+        /// reached game over conditions.
 
         // TODO: Implement a function in Cell.cs that checks for endgame,
         //       or calls the check script based on it's location.
 
+        bool canPlay = true;
         for(int i = 0; i < playField.GetLength(0); ++i) {
             for(int j = 20; j < playField.GetLength(1); ++j) {
                 canPlay &= !playField[i, j];
@@ -34,11 +42,17 @@ public class GameManager : MonoBehaviour
 
         if (canPlay) {
             CheckLines();
+            UpdateScore();
             CreateNewTetrimino();
         }
         else {
-            print("Game Over");
+            print("Game Over??");
         }
+    }
+
+    private void UpdateScore()
+    {
+        scoreText.text = score.ToString();
     }
 
     private void CreateNewTetrimino()
@@ -66,6 +80,8 @@ public class GameManager : MonoBehaviour
             if(lineFilled) {
                 ClearLine(row);
                 --row;
+
+                score += 500;
             }
             else {
                 /// An empty spot was present in the row (value = false)

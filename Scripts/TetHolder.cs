@@ -4,10 +4,8 @@ public class TetHolder : MonoBehaviour
 {
     public GameManager gm;
 
-    public float moveVal = 0.1f;
-    public float rotateVal = 0.1f;
-
     private Cell[] children;
+
     private float fallTimer;
     private float fallIncrement;
 
@@ -19,83 +17,89 @@ public class TetHolder : MonoBehaviour
 
     private void Start()
     {
-        gm = FindObjectOfType<GameManager>();
+        gm       = FindObjectOfType<GameManager>();
         children = GetComponentsInChildren<Cell>();
 
         fallTimer   = fallIncrement   = gm.fallVal;
-        moveTimer   = moveIncrement   = moveVal;
-        rotateTimer = rotateIncrement = rotateVal;
+        moveTimer   = moveIncrement   = gm.moveVal;
+        rotateTimer = rotateIncrement = gm.rotateVal;
     }
 
     private void Update()
     {
         if(Time.time >= rotateTimer) {
-            if(Input.GetKey(KeyCode.Slash)) {
-                Rotate(true);
-            }
-            else if(Input.GetKey(KeyCode.Period)) {
-                Rotate(false);
-            }
-
-            rotateTimer = Time.time + rotateIncrement;
+            Rotate(Input.GetKey(KeyCode.Slash), Input.GetKey(KeyCode.Period));
         }
-        LeftRightMovement();
+
+        if (Time.time >= moveTimer) {
+            LeftRightMovement(Input.GetKey(KeyCode.A), Input.GetKey(KeyCode.D));
+        }
 
         if (Time.time >= fallTimer) {
             Fall();
-            fallTimer = Time.time + fallIncrement;
         }
     }
 
-    private void Rotate(bool isClockwise)
+    private void Rotate(bool clockwise = false, bool antiClockwise = false)
     {
-        bool isBlocked = false;
+        /// NOTE: Could be done better
+        if (!clockwise && !antiClockwise) {
+            return;    /// Dont execute if no input given
+        }
 
         Vector2[] newLocalChildPos = new Vector2[children.Length];
 
+        float parentX = transform.position.x;
+        float parentY = transform.position.y;
+
+        bool isBlocked = false;
+
+        /// Rotation is done by transposing the cell matrix (wrt TetHolder), then
+        /// rows are reversed for anticlockwise rotation
+        /// columns are reversed for clockwise rotation
+        /// (Opp to usual maths, since matrix 0,0 taken at centre
+        /// and not at corner
         for(int i = 0; i < children.Length; ++i) {
+            /// Transposing a matrix by interchanging is x,y cords
             newLocalChildPos[i].x = children[i].transform.localPosition.y;
             newLocalChildPos[i].y = children[i].transform.localPosition.x;
 
-            if(isClockwise) {
+            /// Reversing column or row based on input for rotation direction
+            if (antiClockwise) {
                 newLocalChildPos[i].x = -newLocalChildPos[i].x;
             }
-            else {
+            else if (clockwise) { 
                 newLocalChildPos[i].y = -newLocalChildPos[i].y;
             }
 
-            float globalX = transform.position.x + newLocalChildPos[i].x;
-            float globalY = transform.position.y + newLocalChildPos[i].y;
+            float globalCellX = parentX + newLocalChildPos[i].x;
+            float globalCellY = parentY + newLocalChildPos[i].y;
 
-            if (globalX < 0 || globalX > 9 || globalY < 0) {
+            /// Checking if any cell crosses over the boundary
+            /// or if they are being blocked by another present cell
+            if (globalCellX < 0 || globalCellX > 9 || globalCellY < 0) {
                 isBlocked = true;
             }
             else {
-                isBlocked |= gm.playField[(int)globalX, (int)globalY];
+                isBlocked |= gm.playField[(int)globalCellX, (int)globalCellY];
             }
         }
 
+        /// Old position being replaced by new one
+        /// since no problems encountered in above checks
         if(!isBlocked) {
             for(int i = 0; i < children.Length; ++i) {
                 children[i].transform.localPosition = new Vector2(newLocalChildPos[i].x, newLocalChildPos[i].y);
             }
         }
+
+        rotateTimer = Time.time + rotateIncrement;
     }
 
-    private void LeftRightMovement()
+    private void LeftRightMovement(bool moveLeft = false, bool moveRight = false)
     {
-        bool moveLeft = false;
-        bool moveRight = false;
-
-        float holderX = transform.position.x;
-        float holderY = transform.position.y;
-
-        if (Time.time > moveTimer) {
-            moveLeft = Input.GetKey(KeyCode.A);
-            moveRight = Input.GetKey(KeyCode.D);
-
-            moveTimer = Time.time + moveIncrement;
-        }
+        float parentX = transform.position.x;
+        float parentY = transform.position.y;
 
         foreach (Cell child in children) {
             float childX = child.transform.position.x;
@@ -103,35 +107,46 @@ public class TetHolder : MonoBehaviour
 
             if (childX <= 0 || gm.playField[(int)childX - 1, (int)childY]) {
                 moveLeft = false;
+                break;
             }
             else if (childX >= 9 || gm.playField[(int)childX + 1, (int)childY]) {
                 moveRight = false;
+                break;
             }
         }
 
         if (moveLeft) {
-            transform.position = new Vector2(holderX - 1, holderY);
+            transform.position = new Vector2(parentX - 1, parentY);
         }
         else if (moveRight) {
-            transform.position = new Vector2(holderX + 1, holderY);
+            transform.position = new Vector2(parentX + 1, parentY);
         }
+
+        moveTimer = Time.time + moveIncrement;
     }
 
     private void Fall()
     {
+        /// Checks if the tetrimino is unhindered
+        /// i.e., it can fall safely without anything blocking it
         bool canFall = true;
         foreach (Cell cell in children) {
             canFall &= cell.IsSafe();
         }
 
-        if(!canFall) {
-            StopFalling();
-        }
-        else {
+        if(canFall) {
             float x = transform.position.x;
             float y = transform.position.y;
             transform.position = new Vector2(x, y - 1);
+
+            gm.score += 1;
         }
+        else {
+            StopFalling();
+            gm.SpawnNext();
+        }
+
+        fallTimer = Time.time + fallIncrement;
     }
 
     private void StopFalling()
@@ -141,8 +156,5 @@ public class TetHolder : MonoBehaviour
         }
         transform.DetachChildren();
         Destroy(gameObject);
-
-        gm.SpawnNext();
-
     }
 }
