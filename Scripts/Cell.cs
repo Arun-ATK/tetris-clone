@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Cell : MonoBehaviour
 {
-    private GameManager gm;
+    public GameManager gm;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        gm = FindObjectOfType<GameManager>();
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Checks if the position below a cell is empty
@@ -21,6 +21,11 @@ public class Cell : MonoBehaviour
         if(x < 0 || x > 19) {
             x = 5;
             Debug.LogError("<b>ERROR</b>: Position of cell out of bounds!");
+        }
+
+        if(!gm) {
+            Debug.LogError("GM NOT SET!");
+            Debug.Break();
         }
 
         return (y > 0 && !gm.playField[x, y - 1]);

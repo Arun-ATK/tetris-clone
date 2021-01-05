@@ -18,9 +18,20 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public int score = 0;
 
+    private bool canSpawnNext;
+
     private void Start()
     {
-        CreateNewTetrimino();
+        canSpawnNext = true;
+        //CreateNewTetrimino();
+    }
+
+    private void Update()
+    {
+        if(canSpawnNext) {
+            CreateNewTetrimino();
+            canSpawnNext = false;
+        }
     }
 
 
@@ -43,10 +54,11 @@ public class GameManager : MonoBehaviour
         if (canPlay) {
             CheckLines();
             UpdateScore();
-            CreateNewTetrimino();
+
+            canSpawnNext = true;
         }
         else {
-            print("Game Over??");
+            print("Game Over");
         }
     }
 
@@ -59,6 +71,7 @@ public class GameManager : MonoBehaviour
     {
         int tetToSpawn = Random.Range(0, tetriminos.Length);
         GameObject tetrimino = tetriminos[tetToSpawn].gameObject;
+
 
         int spawnPoint = tetrimino.CompareTag("TetO") ? 1 : 0;
 

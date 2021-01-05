@@ -20,8 +20,8 @@ public class TetHolder : MonoBehaviour
         gm       = FindObjectOfType<GameManager>();
         children = GetComponentsInChildren<Cell>();
 
-        fallTimer   = fallIncrement   = gm.fallVal;
-        moveTimer   = moveIncrement   = gm.moveVal;
+        fallTimer = fallIncrement = gm.fallVal;
+        moveTimer = moveIncrement = gm.moveVal;
         rotateTimer = rotateIncrement = gm.rotateVal;
     }
 
