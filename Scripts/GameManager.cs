@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,8 +46,8 @@ public class GameManager : MonoBehaviour
         //       or calls the check script based on it's location.
 
         bool canPlay = true;
-        for(int i = 0; i < playField.GetLength(0); ++i) {
-            for(int j = 20; j < playField.GetLength(1); ++j) {
+        for (int i = 0; i < playField.GetLength(0); ++i) {
+            for (int j = 20; j < playField.GetLength(1); ++j) {
                 canPlay &= !playField[i, j];
             }
         }
@@ -58,7 +59,7 @@ public class GameManager : MonoBehaviour
             canSpawnNext = true;
         }
         else {
-            print("Game Over");
+            GameOver();
         }
     }
 
@@ -144,5 +145,21 @@ public class GameManager : MonoBehaviour
                 playField[i, j] = playField[i, j + 1];
             }
         }
+    }
+
+    private void GameOver()
+    {
+        PlayerPrefs.SetInt("Score", score);
+
+        if (PlayerPrefs.HasKey("High Score")) {
+            if(PlayerPrefs.GetInt("High Score") < score) {
+                PlayerPrefs.SetInt("High Score", score);
+            }
+        }
+        else {
+            PlayerPrefs.SetInt("High Score", score);
+        }
+
+        SceneManager.LoadScene(2);
     }
 }
